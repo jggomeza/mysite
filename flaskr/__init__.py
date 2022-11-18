@@ -44,7 +44,7 @@ def create_app(test_config=None):
 # Run app
 # flask --app flaskr --debug run
 # flask --app flaskr --debug run --host=0.0.0.0
-# flask --app flaskr --debug run --host=0.0.0.0 --post=8080
+# flask --app flaskr --debug run --host=0.0.0.0 --port=8080
 # flask --app flaskr init-db
 
 # Install the Project
