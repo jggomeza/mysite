@@ -69,3 +69,5 @@ def create_app(test_config=None):
 # Run with a Production Server
 # pip install waitress
 # waitress-serve --call 'flaskr:create_app'
+
+# esto es un cambio para develop
