@@ -1,0 +1,54 @@
+{% extends 'auth/auth_base.html' %}
+{% block title %}Registrar{% endblock %}
+{% block body %}
+  {{ super() }}
+  <div class="section"></div>
+  <main>
+      <center>
+          <!-- <img class="responsive-img" style="width: 250px;" src="http://i.imgur.com/ax0NCsK.gif" /> -->
+          <h2>IT Solutions</h2>
+          <div class="section"></div>
+
+          <h5 class="indigo-text">Por favor, ingrese en su cuenta</h5>
+          
+          <div class="container">
+              <div class="z-depth-1 grey lighten-4 row" style="display: inline-block; padding: 32px 48px 0px 48px; border: 1px solid #EEE;">
+                <form class="col s12" method="POST">
+                  <div class="row">
+                    {% for message in get_flashed_messages() %}
+                      <div class="flash">{{ message }}</div>
+                    {% endfor %}
+                  </div>
+                  
+                  <div class='row'>
+                    <div class='input-field col s12'>
+                        <i class="material-icons prefix">person</i>
+                        {{ form.username(id='username', class='validate') }}
+                        {{ form.username.label }} 
+                    </div>
+                  </div>
+
+                  <div class='row'>
+                    <div class='input-field col s12'>
+                        <i class="material-icons prefix">key</i>
+                        {{ form.password(id='password', class='validate') }}
+                        {{ form.password.label }}
+                    </div>
+                    <label style='float: right;'><a class='pink-text' href='#!'><b>Recuperar clave?</b></a></label>
+                  </div>
+                  
+                  <center>
+                    <div class='row'>
+                      {{ form.submit(value="Log In", class='col s12 btn btn-large waves-effect indigo') }}
+                    </div>
+                  </center>
+                </form>
+              </div>
+          </div>
+          <a href="{{ url_for('auth.register') }}">Crear cuenta</a>
+      </center>
+
+      <div class="section"></div>
+      <div class="section"></div>
+  </main>
+{% endblock %}
