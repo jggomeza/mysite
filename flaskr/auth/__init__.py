@@ -1,4 +1,5 @@
 import functools
+from .forms import FormLogin, FormRegister
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
@@ -11,6 +12,13 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
+    form = FormRegister(request.form)
+
+    if form.validate():
+        user = form.username.data
+        password = form.password.data
+        form.username.data = ''
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -36,10 +44,17 @@ def register():
 
         flash(error)
 
-    return render_template('auth/register.html')
+    return render_template('auth/register.html', form=form)
 
-@bp.route('/login', methods=('GET', 'POST'))
+@bp.route('/login', methods=['GET', 'POST'])
 def login():
+    form = FormLogin(request.form)
+
+    if form.validate():
+        user = form.username.data
+        password = form.password.data
+        form.username.data = ''
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -61,7 +76,7 @@ def login():
 
         flash(error)
 
-    return render_template('auth/login.html')
+    return render_template('auth/login.html', form=form)
 
 @bp.before_app_request
 def load_logged_in_user():
