@@ -1,24 +1,342 @@
-<!doctype html>
-<title>{% block title %}{% endblock %} - Flaskr</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<nav>
-  <h1>Flaskr</h1>
-  <ul>
-    {% if g.user %}
-      <li><span>{{ g.user['username'] }}</span>
-      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
-    {% else %}
-      <li><a href="{{ url_for('auth.register') }}">Register</a>
-      <li><a href="{{ url_for('auth.login') }}">Log In</a>
-    {% endif %}
-  </ul>
-</nav>
-<section class="content">
-  <header>
-    {% block header %}{% endblock %}
-  </header>
-  {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-  {% endfor %}
-  {% block content %}{% endblock %}
-</section>
+{% block doc -%}
+<!DOCTYPE html>
+<html {% block html_attribs %}{% endblock html_attribs %}>
+{%- block html %}
+  <head>
+    {%- block head %}
+    <!-- Favicons-->
+    <link rel="icon" href="{{ url_for('static', filename = 'img/favicon/favicon-32x32.png') }}" type="image/x-icon" sizes="32x32">
+    <!-- Favicons-->
+    <link rel="apple-touch-icon-precomposed" href="{{ url_for('static', filename = 'img/favicon/apple-touch-icon-152x152.png') }}">
+    <title>{% block title %}{{title|default}}{% endblock title %}</title>
+
+    {%- block metas %}
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="msapplication-tap-highlight" content="no">
+      <meta name="description" content="Materialize is a Material Design Admin Template,It's modern, responsive and based on Material Design by Google. ">
+      <meta name="keywords" content="materialize, admin template, dashboard template, flat admin template, responsive admin template,">
+      <!-- For iPhone -->
+      <meta name="msapplication-TileColor" content="#00bcd4">
+      <meta name="msapplication-TileImage" content="{{ url_for('static', filename = 'img/favicon/mstile-144x144.png') }}">
+      <!-- For Windows Phone -->
+    {%- endblock metas %}
+
+    {%- block styles %}
+        <!-- CORE CSS-->
+        <link href="{{ url_for('static', filename = 'css/materialize.css') }}" type="text/css" rel="stylesheet">
+        <link href="{{ url_for('static', filename = 'css/style.css') }}" type="text/css" rel="stylesheet">
+        <!-- Custome CSS-->
+        <link href="{{ url_for('static', filename = 'css/custom/custom.css') }}" type="text/css" rel="stylesheet">
+        <!-- INCLUDED PLUGIN CSS ON THIS PAGE -->
+        <link href="{{ url_for('static', filename = 'vendors/prism/prism.css') }}" type="text/css" rel="stylesheet">
+        <link href="{{ url_for('static', filename = 'vendors/perfect-scrollbar/perfect-scrollbar.css') }}" type="text/css" rel="stylesheet">
+        <link href="{{ url_for('static', filename = 'vendors/flag-icon/css/flag-icon.min.css') }}" type="text/css" rel="stylesheet">
+    {%- endblock styles %}
+    {%- endblock head %}
+  </head>
+  <body{% block body_attribs %}{% endblock body_attribs %}>
+    {% block body -%}
+        <!-- Start Page Loading -->
+        <div id="loader-wrapper">
+            <div id="loader"></div>
+            <div class="loader-section section-left"></div>
+            <div class="loader-section section-right"></div>
+        </div>
+        <!-- End Page Loading -->
+
+        {% block header %}
+          <!-- START HEADER -->
+            <header id="header" class="page-topbar">
+                <!-- start header nav-->
+                <div class="navbar-fixed">
+                <nav class="navbar-color gradient-45deg-light-blue-cyan">
+                    <div class="nav-wrapper">
+                    <ul class="left">
+                        <li>
+                        <h1 class="logo-wrapper">
+                            <a href="{{ url_for('index') }}" class="brand-logo darken-1">
+                                <img src="{{ url_for('static', filename = 'img/logo/materialize-logo.png') }}" alt="materialize logo">
+                                <span class="logo-text hide-on-med-and-down">IT Solutions</span>
+                            </a>
+                        </h1>
+                        </li>
+                    </ul>
+                    <div class="header-search-wrapper hide-on-med-and-down">
+                        <i class="material-icons">search</i>
+                        <input type="text" name="Search" class="header-search-input z-depth-2" placeholder="Explore IT Solutions" />
+                    </div>
+                    <ul class="right hide-on-med-and-down">
+                        <li>
+                        <a href="javascript:void(0);" class="waves-effect waves-block waves-light translation-button" data-activates="translation-dropdown">
+                            <span class="flag-icon flag-icon-gb"></span>
+                            </a>
+                        </li>
+                        <li>
+                        <a href="javascript:void(0);" class="waves-effect waves-block waves-light toggle-fullscreen">
+                            <i class="material-icons">settings_overscan</i>
+                            </a>
+                        </li>
+                        <li>
+                        <a href="javascript:void(0);" class="waves-effect waves-block waves-light notification-button" data-activates="notifications-dropdown">
+                            <i class="material-icons">notifications_none
+                                <small class="notification-badge pink accent-2">5</small>
+                            </i>
+                            </a>
+                        </li>
+                        <li>
+                        <a href="javascript:void(0);" class="waves-effect waves-block waves-light profile-button" data-activates="profile-dropdown">
+                            <span class="avatar-status avatar-online">
+                                <img src="{{ url_for('static', filename = 'img/avatar/avatar-7.png') }}" alt="avatar">
+                                <i></i>
+                            </span>
+                            </a>
+                        </li>
+                        <li>
+                        <a href="#" data-activates="chat-out" class="waves-effect waves-block waves-light chat-collapse">
+                            <i class="material-icons">format_indent_increase</i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- translation-button -->
+                    <ul id="translation-dropdown" class="dropdown-content">
+                        <li>
+                        <a href="#!" class="grey-text text-darken-1">
+                            <i class="flag-icon flag-icon-gb"></i> English</a>
+                        </li>
+                        <li>
+                        <a href="#!" class="grey-text text-darken-1">
+                            <i class="flag-icon flag-icon-fr"></i> French</a>
+                        </li>
+                        <li>
+                        <a href="#!" class="grey-text text-darken-1">
+                            <i class="flag-icon flag-icon-cn"></i> Chinese</a>
+                        </li>
+                        <li>
+                        <a href="#!" class="grey-text text-darken-1">
+                            <i class="flag-icon flag-icon-de"></i> German</a>
+                        </li>
+                    </ul>
+                    <!-- notifications-dropdown -->
+                    <ul id="notifications-dropdown" class="dropdown-content">
+                        <li>
+                        <h6>NOTIFICATIONS
+                            <span class="new badge">5</span>
+                        </h6>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                        <a href="#!" class="grey-text text-darken-2">
+                            <span class="material-icons icon-bg-circle cyan small">add_shopping_cart</span> A new order has been placed!</a>
+                        <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">2 hours ago</time>
+                        </li>
+                        <li>
+                        <a href="#!" class="grey-text text-darken-2">
+                            <span class="material-icons icon-bg-circle red small">stars</span> Completed the task</a>
+                        <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">3 days ago</time>
+                        </li>
+                        <li>
+                        <a href="#!" class="grey-text text-darken-2">
+                            <span class="material-icons icon-bg-circle teal small">settings</span> Settings updated</a>
+                        <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">4 days ago</time>
+                        </li>
+                        <li>
+                        <a href="#!" class="grey-text text-darken-2">
+                            <span class="material-icons icon-bg-circle deep-orange small">today</span> Director meeting started</a>
+                        <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">6 days ago</time>
+                        </li>
+                        <li>
+                        <a href="#!" class="grey-text text-darken-2">
+                            <span class="material-icons icon-bg-circle amber small">trending_up</span> Generate monthly report</a>
+                        <time class="media-meta" datetime="2015-06-12T20:50:48+08:00">1 week ago</time>
+                        </li>
+                    </ul>
+                    <!-- profile-dropdown -->
+                    <ul id="profile-dropdown" class="dropdown-content">
+                        <li>
+                        <a href="#" class="grey-text text-darken-1">
+                            <i class="material-icons">face</i> Profile</a>
+                        </li>
+                        <li>
+                        <a href="#" class="grey-text text-darken-1">
+                            <i class="material-icons">settings</i> Settings</a>
+                        </li>
+                        <li>
+                        <a href="#" class="grey-text text-darken-1">
+                            <i class="material-icons">live_help</i> Help</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                        <a href="#" class="grey-text text-darken-1">
+                            <i class="material-icons">lock_outline</i> Lock</a>
+                        </li>
+                        <li>
+                        <a href="{{ url_for('auth.logout') }}" class="grey-text text-darken-1">
+                            <i class="material-icons">keyboard_tab</i> Logout</a>
+                        </li>
+                    </ul>
+                    </div>
+                </nav>
+                </div>
+                <!-- end header nav-->
+            </header>
+            <!-- END HEADER -->
+        {%- endblock header %}
+
+      {% block main -%}
+        <!-- START MAIN -->
+        <div id="main">
+            <!-- START WRAPPER -->
+            <div class="wrapper">
+            
+            {% block aside -%}
+                <!-- START LEFT SIDEBAR NAV-->
+                <aside id="left-sidebar-nav">
+                    <ul id="slide-out" class="side-nav fixed leftside-navigation">
+                    <li class="user-details cyan darken-2">
+                        <div class="row">
+                        <div class="col col s4 m4 l4">
+                            <img src="{{ url_for('static', filename = 'img/avatar/avatar-7.png') }}" alt="" class="circle responsive-img valign profile-image cyan">
+                        </div>
+                        <div class="col col s8 m8 l8">
+                            <ul id="profile-dropdown-nav" class="dropdown-content">
+                            <li>
+                                <a href="#" class="grey-text text-darken-1">
+                                    <i class="material-icons">face</i> Profile</a>
+                            </li>
+                            <li>
+                                <a href="#" class="grey-text text-darken-1">
+                                    <i class="material-icons">settings</i> Settings</a>
+                            </li>
+                            <li>
+                                <a href="#" class="grey-text text-darken-1">
+                                    <i class="material-icons">live_help</i> Help</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="#" class="grey-text text-darken-1">
+                                    <i class="material-icons">lock_outline</i> Lock</a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('auth.logout') }}" class="grey-text text-darken-1">
+                                    <i class="material-icons">keyboard_tab</i> Logout</a>
+                            </li>
+                            </ul>
+                            <a class="btn-flat dropdown-button waves-effect waves-light white-text profile-btn" href="#" data-activates="profile-dropdown-nav">{% block username %}{% endblock username %}<i class="mdi-navigation-arrow-drop-down right"></i></a>
+                            <p class="user-roal">Administrator</p>
+                        </div>
+                        </div>
+                    </li>
+                    <li class="no-padding">
+                        <ul class="collapsible" data-collapsible="accordion">
+                        <li class="bold">
+                            <a href="{{ url_for('index') }}" class="waves-effect waves-cyan">
+                                <i class="material-icons">pie_chart_outlined</i>
+                                <span class="nav-text">Dashboard</span>
+                                </a>
+                        </li>
+                        </ul>
+                    </li>
+                    </ul>
+                    <a href="#" data-activates="slide-out" class="sidebar-collapse btn-floating btn-medium waves-effect waves-light hide-on-large-only">
+                        <i class="material-icons">menu</i>
+                    </a>
+                </aside>
+                <!-- END LEFT SIDEBAR NAV-->
+            {%- endblock aside %}
+            
+            <!-- START CONTENT -->
+            {% block content -%}
+                <section id="content">
+                    <!--breadcrumbs start-->
+                    <div id="breadcrumbs-wrapper">
+                        <!-- Search for small screen -->
+                        <div class="header-search-wrapper gradient-45deg-light-blue-cyan hide-on-large-only">
+                            <input type="text" name="Search" class="header-search-input z-depth-2" placeholder="Explore IT Solutions">
+                        </div>
+                    </div>
+                    <!--breadcrumbs end-->
+
+                    {% block container -%}
+                        <!--start container-->
+                        <div class="container">
+                            <div class="section">
+                                <div class="row">
+                                <div class="col s12 m12">
+                                    <div class="card gradient-45deg-light-blue-cyan">
+                                    <div class="card-content white-text">
+                                        <span class="card-title">Where can I get some?</span>
+                                        <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</p>
+                                    </div>
+                                    <div class="card-action">
+                                        <a href="#">Edit</a>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+
+                                <div class="divider"></div>
+
+                                <div class="row">
+                                <div class="col s12 m12">
+                                    <div class="card gradient-45deg-light-blue-cyan">
+                                    <div class="card-content white-text">
+                                        <span class="card-title">Where can I get some?</span>
+                                        <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.</p>
+                                    </div>
+                                    <div class="card-action">
+                                        <a href="#">Edit</a>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    {%- endblock container %}
+                </section>
+            {%- endblock content %}
+            </div>
+            <!-- END WRAPPER -->
+        </div>
+        <!-- END MAIN -->
+      {%- endblock main %}
+
+      {% block footer -%}
+        <!-- START FOOTER -->
+        <footer class="page-footer gradient-45deg-light-blue-cyan">
+            <div class="footer-copyright">
+            <div class="container">
+                <span>Copyright ©
+                    <script type="text/javascript">
+                        document.write(new Date().getFullYear());
+                    </script> <a class="grey-text text-lighten-2" href="http://themeforest.net/user/pixinvent/portfolio?ref=pixinvent" target="_blank">PIXINVENT</a> All rights reserved.</span>
+                <span class="right hide-on-small-only"> Design and Developed by <a class="grey-text text-lighten-2" href="https://pixinvent.com/">Ing. JGOMEZA</a></span>
+            </div>
+            </div>
+        </footer>
+        <!-- END FOOTER -->
+      {%- endblock footer %}
+
+      {% block scripts %}
+        <!-- ================================================
+            Scripts
+        ================================================ -->
+        <!-- jQuery Library -->
+        <script type="text/javascript" src="{{ url_for('static', filename = 'vendors/jquery-3.2.1.min.js') }}"></script>
+        <!--materialize js-->
+        <script type="text/javascript" src="{{ url_for('static', filename = 'js/materialize.min.js') }}"></script>
+        <!--prism-->
+        <script type="text/javascript" src="{{ url_for('static', filename = 'vendors/prism/prism.js') }}"></script>
+        <!--scrollbar-->
+        <script type="text/javascript" src="{{ url_for('static', filename = 'vendors/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
+        <!--plugins.js - Some Specific JS codes for Plugin Settings-->
+        <script type="text/javascript" src="{{ url_for('static', filename = 'js/plugins.js') }}"></script>
+        <!--custom-script.js - Add your own theme custom JS-->
+        <script type="text/javascript" src="{{ url_for('static', filename = 'js/custom-script.js') }}"></script>
+      {%- endblock scripts %}
+    {%- endblock body %}
+  </body>
+{%- endblock html %}
+</html>
+{% endblock doc -%}
